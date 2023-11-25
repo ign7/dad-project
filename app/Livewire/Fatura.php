@@ -50,8 +50,8 @@ class Fatura extends Component
     {
         $fatura = Faturas::Find($fatura_id);
 
-        $url = "http://localhost:8080/pagamento/realizarpagamento/saldo={$this->auth->saldo}/valorfatura={$fatura->valor}
-    /data={$fatura->data}/status={$fatura->status}/idfatura={$fatura->id}";
+        $url = "http://localhost:8080/pagamento/realizarpagamento/saldo={$this->auth->saldo}/valorfatura={$fatura->valor}/data={$fatura->data}/status={$fatura->status}/idfatura={$fatura->id}";
+    
 
         $client = new Client();
 
@@ -77,25 +77,22 @@ class Fatura extends Component
         }
     }
 
+    
+
     public function gerarFaturas()
     {
-
-        $numeroDeFaturas = 2;
-
+        $numeroDeFaturas = 1;
         for ($i = 0; $i < $numeroDeFaturas; $i++) {
 
             Faturas::create([
-                'user_id' => $this->auth->id, // Substitua pelos IDs de usuários existentes
+                'user_id' => $this->auth->id, 
                 'valor' => rand(50, 200),
                 'data' => now()->subDays(rand(1, 30)),
                 'status' => 'pendente',
             ]);
-        }
-
-
-
-        $this->viewFaturas();
-        return session()->flash('Faturasucesso', 'Faturas Geradas deste mes !!');
+        }          
+        session()->flash('Faturasucesso', 'Faturas Geradas deste mes !!'); 
+        $this->viewFaturas();       
     }
 
     public function AddSaldo()
@@ -117,7 +114,7 @@ class Fatura extends Component
 
     public function closealert()
     {
-        $this->showAlert = false;
+        $this->showAlert = false;   
     }
 
 
