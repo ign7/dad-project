@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 
 class Fatura extends Component
 {
-    public $selectsaldo = 0, $showAlert, $meusaldo, $auth, $enablefaturas = false,$viewpagas=false,$viewpandentes=false;
+    public $selectsaldo = 0, $showAlert, $meusaldo, $auth, $enablefaturas = false, $viewpagas = false, $viewpandentes = false;
     public $faturas = array();
     public $notasfiscais = array();
 
@@ -25,7 +25,7 @@ class Fatura extends Component
     public function viewFaturas()
     {
         $this->enablefaturas = true;
-        $this->viewpagas=false;
+        $this->viewpagas = false;
     }
 
     public function viewSaldo()
@@ -39,21 +39,32 @@ class Fatura extends Component
         $client = new Client();
         try {
             $response = $client->get($url);
-            $body = json_decode($response->getBody(), true);                     
-            $this->notasfiscais=$body;          
+            $body = json_decode($response->getBody(), true);
+            $fatura=array();  
+            $fatura=$this->auth->faturas;
+            foreach ($body as $values) {
+                foreach ($fatura as $f) {
+                    $idfatura = $f->id;
+                    if ($idfatura == $values['id_fatura']) {
+                        $this->notasfiscais[] = $values;
+                    }
+                }
+            }
         } catch (\Exception $e) {
             session()->flash('saldonegativo', $e->getMessage());
         }
     }
 
-    public function faturaspagas(){
-        $this->viewpagas=true;  
-        $this->viewpandentes=false;     
+    public function faturaspagas()
+    {
+        $this->viewpagas = true;
+        $this->viewpandentes = false;
     }
 
-    public function faturaspendetes(){
-        $this->viewpagas=false;  
-        $this->viewpandentes=true;     
+    public function faturaspendetes()
+    {
+        $this->viewpagas = false;
+        $this->viewpandentes = true;
     }
 
     public function pagar($fatura_id)
@@ -61,7 +72,7 @@ class Fatura extends Component
         $fatura = Faturas::Find($fatura_id);
 
         $url = "http://localhost:8080/pagamento/realizarpagamento/saldo={$this->auth->saldo}/valorfatura={$fatura->valor}/data={$fatura->data}/status={$fatura->status}/idfatura={$fatura->id}";
-    
+
 
         $client = new Client();
 
@@ -87,7 +98,7 @@ class Fatura extends Component
         }
     }
 
-    
+
 
     public function gerarFaturas()
     {
@@ -95,14 +106,14 @@ class Fatura extends Component
         for ($i = 0; $i < $numeroDeFaturas; $i++) {
 
             Faturas::create([
-                'user_id' => $this->auth->id, 
+                'user_id' => $this->auth->id,
                 'valor' => rand(50, 200),
                 'data' => now()->subDays(rand(1, 30)),
                 'status' => 'pendente',
             ]);
-        }          
-        session()->flash('Faturasucesso', 'Faturas Geradas deste mes !!'); 
-        $this->viewFaturas();       
+        }
+        session()->flash('Faturasucesso', 'Faturas Geradas deste mes !!');
+        $this->viewFaturas();
     }
 
     public function AddSaldo()
@@ -124,7 +135,7 @@ class Fatura extends Component
 
     public function closealert()
     {
-        $this->showAlert = false;   
+        $this->showAlert = false;
     }
 
 

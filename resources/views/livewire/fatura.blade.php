@@ -44,18 +44,18 @@
         </div>
     @endif
 
-    <div class="">
-        <div>
-            <h1 class=" mt-8 mb-4 text-5xl font-medium text-gray-900 font-bold transform hover:text-blue-600 transition-transform hover:scale-95 pb-6 mt-2 text-2xl font-medium text-gray-900 ">
+    <div>
+        <div  class="border-b-2 pb-2">
+            <h1 class=" mt-8  text-5xl font-medium text-gray-900 font-bold transform hover:text-blue-600 transition-transform hover:scale-95 pb-6 mt-2 text-2xl font-medium text-gray-900 ">
                 @payment-dad
             </h1>
         </div>
 
-        <div class="flex transform hover:text-blue-600 transition-transform hover:scale-95 pb-2 mt-2 text-2xl font-medium text-gray-900">
+        <div class=" pt-8 flex transform hover:text-blue-600 transition-transform hover:scale-95 pb-2 mt-2 text-2xl font-medium text-gray-900">
             <h1 class="pr-2 ">
                 Gerar Fatura
             </h1>
-            <button wire:click="gerarFaturas"
+            <button wire:click.prevent="gerarFaturas"
                 class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
                 Gerar
                 <span class="material-symbols-outlined">sync</span>
