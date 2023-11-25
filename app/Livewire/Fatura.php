@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 
 class Fatura extends Component
 {
-    public $selectsaldo = 0, $showAlert, $meusaldo, $auth, $enablefaturas = false, $viewpagas = false, $viewpandentes = false;
+    public $selectsaldo = 0, $showAlert, $meusaldo, $auth, $enablefaturas = false, $viewpagas = false, $faturagerada,$viewpandentes = false;
     public $faturas = array();
     public $notasfiscais = array();
 
@@ -105,14 +105,15 @@ class Fatura extends Component
         $numeroDeFaturas = 1;
         for ($i = 0; $i < $numeroDeFaturas; $i++) {
 
-            Faturas::create([
+          $this->faturagerada=  Faturas::create([
                 'user_id' => $this->auth->id,
                 'valor' => rand(50, 200),
                 'data' => now()->subDays(rand(1, 30)),
                 'status' => 'pendente',
             ]);
         }
-        session()->flash('Faturasucesso', 'Faturas Geradas deste mes !!');
+
+        session()->flash('Faturasucesso', 'Fatura Gerada !!');
         $this->viewFaturas();
     }
 
