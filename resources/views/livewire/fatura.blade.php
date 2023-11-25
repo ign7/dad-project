@@ -51,14 +51,32 @@
             </h1>
         </div>
 
-        <div class="transform hover:text-blue-600 transition-transform hover:scale-95 pb-2 mt-2 text-2xl font-medium text-gray-900">
-            <h1 class=" ">
+        <div class="flex transform hover:text-blue-600 transition-transform hover:scale-95 pb-2 mt-2 text-2xl font-medium text-gray-900">
+            <h1 class="pr-2 ">
                 Gerar Fatura
             </h1>
+            <button wire:click="gerarFaturas"
+                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
+                Gerar
+                <span class="material-symbols-outlined">sync</span>
+            </button>
 
-            <button wire:click="gerarFaturas" id="apropria"
-                class="rounded-md bg-blue-600 font-bold text-slate-50" type="text">
-                <span class="material-symbols-outlined">sync</span>Gerar
+            <h1 class="pl-4 pr-2 ">
+                Faturas Pagas
+            </h1>
+            <button wire:click.prevent="faturaspagas"
+                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-500 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 white:bg-green-600 white:hover:bg-green-700 white:focus:ring-green-800">
+                Conferir
+                <span class="material-symbols-outlined">sync</span>
+            </button>
+
+            <h1 class="pl-4 pr-2 ">
+                Faturas Pendentes
+            </h1>
+            <button wire:click.prevent="faturaspendetes"
+                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 white:bg-orange-600 white:hover:bg-orange-700 white:focus:ring-orange-800">
+                Conferir
+                <span class="material-symbols-outlined">sync</span>
             </button>
 
         </div>
@@ -97,13 +115,53 @@
         <div class="pl-16">
             <div wire:click.prevent="viewFaturas">
                 <h1 class="transform hover:text-blue-600 transition-transform hover:scale-105 pb-6 mt-2 text-2xl font-medium text-gray-900">
-                    Faturas Pendentes
+                    Faturas
                 </h1>
             </div>
             @if ($enablefaturas || $faturas)
                 <div class=" lg:flex lg:flex-wrap">
                     @foreach ($faturas as $fatura)
-                        @if ($fatura->status == 'pendente')
+                        @if ($fatura->status == 'pendente' && $viewpagas==false)
+                            <div
+                                class="max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow white:bg-gray-800 white:border-gray-700 lg:w-1/1">
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 white:text-white">
+                                    {{ $fatura->status }}
+                                </h5>
+                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Gerada em : {{ $fatura->data }}</p>
+                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">R$ {{ $fatura->valor }}</p>
+                                <button wire:click.prevent="pagar({{ $fatura->id }})"
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
+                                    Pagar
+                                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                    </svg>
+                                </button>
+                            </div>
+                        @endif
+
+                        @if ($fatura->status == 'pago' && $viewpagas && !$viewpandentes) 
+                            <div
+                                class="max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow white:bg-gray-800 white:border-gray-700 lg:w-1/1">
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 white:text-white">
+                                    {{ $fatura->status }}
+                                </h5>
+                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Gerada em : {{ $fatura->data }}</p>
+                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">R$ {{ $fatura->valor }}</p>
+                                <button wire:click.prevent="pagar({{ $fatura->id }})"
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
+                                    Pagar
+                                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                    </svg>
+                                </button>
+                            </div>
+                        @endif
+
+                        @if ($fatura->status == 'pendente' && $viewpagas==false && $viewpandentes==true)
                             <div
                                 class="max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow white:bg-gray-800 white:border-gray-700 lg:w-1/1">
                                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 white:text-white">

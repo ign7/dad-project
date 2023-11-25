@@ -10,9 +10,8 @@ use GuzzleHttp\Client;
 
 class Fatura extends Component
 {
-    public $selectsaldo = 0, $showAlert, $meusaldo, $auth, $enablefaturas = false;
+    public $selectsaldo = 0, $showAlert, $meusaldo, $auth, $enablefaturas = false,$viewpagas=false,$viewpandentes=false;
     public $faturas = array();
-
     public $notasfiscais = array();
 
 
@@ -26,6 +25,7 @@ class Fatura extends Component
     public function viewFaturas()
     {
         $this->enablefaturas = true;
+        $this->viewpagas=false;
     }
 
     public function viewSaldo()
@@ -44,6 +44,16 @@ class Fatura extends Component
         } catch (\Exception $e) {
             session()->flash('saldonegativo', $e->getMessage());
         }
+    }
+
+    public function faturaspagas(){
+        $this->viewpagas=true;  
+        $this->viewpandentes=false;     
+    }
+
+    public function faturaspendetes(){
+        $this->viewpagas=false;  
+        $this->viewpandentes=true;     
     }
 
     public function pagar($fatura_id)
