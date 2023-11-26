@@ -29,6 +29,16 @@
         </div>
     @endif
 
+
+    <div wire:ignore class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+        <select id="selectElement">
+            <option>Option 1</option>
+            <option>Option 2</option>
+            <option>Option 3</option>
+        </select>
+    </div>
+
+
     @if (session()->has('saldonegativo'))
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <strong class="font-bold">Error !!</strong>
@@ -45,13 +55,15 @@
     @endif
 
     <div>
-        <div  class="border-b-2 pb-2">
-            <h1 class=" mt-8  text-5xl font-medium text-gray-900 font-bold transform hover:text-blue-600 transition-transform hover:scale-95 pb-6 mt-2 text-2xl font-medium text-gray-900 ">
+        <div class="border-b-2 pb-2">
+            <h1
+                class=" mt-8  text-5xl font-medium text-gray-900 font-bold transform hover:text-blue-600 transition-transform hover:scale-95 pb-6 mt-2 text-2xl font-medium text-gray-900 ">
                 @payment-dad
             </h1>
         </div>
 
-        <div class=" pt-8 flex transform hover:text-blue-600 transition-transform hover:scale-95 pb-2 mt-2 text-2xl font-medium text-gray-900">
+        <div
+            class=" pt-8 flex transform hover:text-blue-600 transition-transform hover:scale-95 pb-2 mt-2 text-2xl font-medium text-gray-900">
             <h1 class="pr-2 ">
                 Gerar Fatura
             </h1>
@@ -84,7 +96,8 @@
 
     <div class="pt-16 grid grid-flow-col justify-around ...">
         <div>
-            <h1 class="transform hover:text-blue-600 transition-transform hover:scale-105  mt-2 text-2xl font-medium text-gray-900">
+            <h1
+                class="transform hover:text-blue-600 transition-transform hover:scale-105  mt-2 text-2xl font-medium text-gray-900">
                 Saldo
             </h1>
 
@@ -111,23 +124,52 @@
 
             </div>
         </div>
-     
+
         <div class="pl-16">
             <div wire:click.prevent="viewFaturas">
-                <h1 class="transform hover:text-blue-600 transition-transform hover:scale-105 pb-6 mt-2 text-2xl font-medium text-gray-900">
+                <h1
+                    class="transform hover:text-blue-600 transition-transform hover:scale-105 pb-6 mt-2 text-2xl font-medium text-gray-900">
                     Faturas
                 </h1>
             </div>
-            @if ($faturagerada &&  $viewpagas==false && $viewpandentes==false)
+            @if ($faturagerada && $viewpagas == false && $viewpandentes == false)
+                <div
+                    class="max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow white:bg-gray-800 white:border-gray-700 lg:w-1/1">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 white:text-white">
+                        FCT-{{ $faturagerada->id }}_{{ $faturagerada->id }}
+                    </h5>
+                    <span
+                        class="bg-orange-500 text-orange-800 text-xs font-lg me-2 px-2.5 py-0.5 rounded white:bg-orange-900 dark:text-white-300">{{ $faturagerada->status }}</span>
+                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Gerada em : {{ $faturagerada->data }}
+                    </p>
+                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">R$ {{ $faturagerada->valor }}</p>
+                    <button wire:click.prevent="pagar({{ $faturagerada->id }})"
+                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
+                        Pagar
+                        <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M1 5h12m0 0L9 1m4 4L9 9" />
+                        </svg>
+                    </button>
+                </div>
+            @endif
+            @if ($faturas)
+                <div class=" lg:flex lg:flex-wrap">
+                    @foreach ($faturas as $fatura)
+                        @if ($fatura->status == 'pago' && $viewpagas && !$viewpandentes)
                             <div
                                 class="max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow white:bg-gray-800 white:border-gray-700 lg:w-1/1">
                                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 white:text-white">
-                                    FCT-{{ $faturagerada->id }}_{{ $faturagerada->id }}
+                                    FCT-{{ $fatura->id }}_{{ $fatura->id }}
                                 </h5>
-                                <span class="bg-orange-500 text-orange-800 text-xs font-lg me-2 px-2.5 py-0.5 rounded white:bg-orange-900 dark:text-white-300">{{ $faturagerada->status }}</span>
-                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Gerada em : {{ $faturagerada->data }}</p>
-                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">R$ {{ $faturagerada->valor }}</p>
-                                <button wire:click.prevent="pagar({{ $faturagerada->id }})"
+                                <span
+                                    class="bg-green-500 text-green-800 text-xs font-lg me-2 px-2.5 py-0.5 rounded white:bg-green-900 dark:text-white-300">{{ $fatura->status }}</span>
+                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Gerada em :
+                                    {{ $fatura->data }}</p>
+                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">R$ {{ $fatura->valor }}
+                                </p>
+                                <button wire:click.prevent="pagar({{ $fatura->id }})"
                                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
                                     Pagar
                                     <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
@@ -138,39 +180,19 @@
                                 </button>
                             </div>
                         @endif
-            @if ($faturas)
-                <div class=" lg:flex lg:flex-wrap">
-                    @foreach ($faturas as $fatura)
-                        @if ($fatura->status == 'pago' && $viewpagas && !$viewpandentes) 
-                        <div
-                        class="max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow white:bg-gray-800 white:border-gray-700 lg:w-1/1">
-                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 white:text-white">
-                           FCT-{{ $fatura->id }}_{{ $fatura->id }}
-                        </h5>
-                        <span class="bg-green-500 text-green-800 text-xs font-lg me-2 px-2.5 py-0.5 rounded white:bg-green-900 dark:text-white-300">{{ $fatura->status }}</span>
-                        <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Gerada em : {{ $fatura->data }}</p>
-                        <p class="mb-3 font-normal text-gray-700 white:text-gray-400">R$ {{ $fatura->valor }}</p>
-                        <button wire:click.prevent="pagar({{ $fatura->id }})"
-                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
-                            Pagar
-                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                            </svg>
-                        </button>
-                    </div>
-                        @endif
 
-                        @if ($fatura->status == 'pendente' && $viewpagas==false && $viewpandentes==true)
+                        @if ($fatura->status == 'pendente' && $viewpagas == false && $viewpandentes == true)
                             <div
                                 class="max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow white:bg-gray-800 white:border-gray-700 lg:w-1/1">
                                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 white:text-white">
-                                   FCT-{{ $fatura->id }}_{{ $fatura->id }}
+                                    FCT-{{ $fatura->id }}_{{ $fatura->id }}
                                 </h5>
-                                <span class="bg-orange-500 text-orange-800 text-xs font-lg me-2 px-2.5 py-0.5 rounded white:bg-orange-900 dark:text-white-300">{{ $fatura->status }}</span>
-                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Gerada em : {{ $fatura->data }}</p>
-                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">R$ {{ $fatura->valor }}</p>
+                                <span
+                                    class="bg-orange-500 text-orange-800 text-xs font-lg me-2 px-2.5 py-0.5 rounded white:bg-orange-900 dark:text-white-300">{{ $fatura->status }}</span>
+                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Gerada em :
+                                    {{ $fatura->data }}</p>
+                                <p class="mb-3 font-normal text-gray-700 white:text-gray-400">R$ {{ $fatura->valor }}
+                                </p>
                                 <button wire:click.prevent="pagar({{ $fatura->id }})"
                                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
                                     Pagar
@@ -202,27 +224,48 @@
         </div>
         <div class="lg:flex lg:flex-wrap">
             @foreach ($notasfiscais as $notas)
-                <div class="max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow white:bg-gray-800 white:border-gray-700 lg:w-1/1">
+                <div
+                    class="max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow white:bg-gray-800 white:border-gray-700 lg:w-1/1">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 white:text-white">
                         {{ $notas['codigo'] }}
                     </h5>
-                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Empresa : {{ $notas['empresa'] }} </p>
-        
-                    
+                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Empresa : {{ $notas['empresa'] }}
+                    </p>
+
+
                     <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Pago em :
                         {{ \Carbon\Carbon::parse($notas['dataTransacao'])->format('d/m/Y') }}</p>
-        
-                    
+
+
                     <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Hora do pagamento :
                         {{ \Carbon\Carbon::parse($notas['dataTransacao'])->subHours(3)->format('H:i:s') }}
 
-        
-                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Faturamento : {{ $notas['data'] }} </p>
-                    <span class="bg-green-500 text-green-800 text-xs font-lg me-2 px-2.5 py-0.5 rounded white:bg-green-900 dark:text-white-300">{{ $notas['status'] }}</span>
-                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Valor : $RS {{ $notas['precoFatura'] }} </p>
-                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Saldo: $RS {{ $notas['saldoAtualizado'] }}</p>
+
+                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Faturamento : {{ $notas['data'] }}
+                    </p>
+                    <span
+                        class="bg-green-500 text-green-800 text-xs font-lg me-2 px-2.5 py-0.5 rounded white:bg-green-900 dark:text-white-300">{{ $notas['status'] }}</span>
+                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Valor : $RS
+                        {{ $notas['precoFatura'] }} </p>
+                    <p class="mb-3 font-normal text-gray-700 white:text-gray-400">Saldo: $RS
+                        {{ $notas['saldoAtualizado'] }}</p>
                 </div>
             @endforeach
         </div>
-        
+
     </div>
+
+    @script
+    <script>
+        new SlimSelect({
+            select: '#selectElement'
+        })
+
+        document.addEventListener("DOMContentLoaded", () => {
+                    Livewire.hook('message.processed', (message, component) => {
+                        new SlimSelect({
+                            select: '#selectElement'
+            })
+        })
+    </script>
+    @endscript
