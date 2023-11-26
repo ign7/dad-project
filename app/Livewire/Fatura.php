@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 
 class Fatura extends Component
 {
-    public $selectsaldo = 0, $showAlert, $meusaldo, $auth, $enablefaturas, $viewpagas,$faturagerada,$viewpandentes;
+    public $selectsaldo = 0, $showAlert, $meusaldo, $loanding=true,$auth, $enablefaturas, $viewpagas,$faturagerada,$viewpandentes;
     public $faturas = array();
     public $notasfiscais = array();
 
@@ -26,6 +26,7 @@ class Fatura extends Component
     {
         $this->enablefaturas = true;
         $this->viewpagas = false;
+        $this->loanding=false;
     }
 
     public function viewSaldo()
@@ -59,12 +60,14 @@ class Fatura extends Component
     {
         $this->viewpagas = true;
         $this->viewpandentes = false;
+        $this->loanding=false;
     }
 
     public function faturaspendetes()
     {
         $this->viewpagas = false;
         $this->viewpandentes = true;
+        $this->loanding=false;
         
     }
 

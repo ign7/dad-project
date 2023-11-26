@@ -126,7 +126,7 @@
         </div>
     </div>
 
-    <div class="pt-16 grid grid-flow-col justify-around ...">
+    <div class=" grid grid-flow-col justify-around ...">
         <div>
             <h1
                 class="transform hover:text-blue-600 transition-transform hover:scale-105  mt-2 text-2xl font-medium text-gray-900">
@@ -186,6 +186,17 @@
                     </button>
                 </div>
             @endif
+
+            @if ($loanding)
+                <div class="pt-16">
+                    <div
+                        class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse white:bg-blue-900 white:text-blue-200">
+                        loading...</div>
+                </div>
+            @endif
+
+
+
             @if ($faturas)
                 <div class=" lg:flex lg:flex-wrap">
                     @foreach ($faturas as $fatura)
@@ -289,9 +300,7 @@
 
     @script
         <script>
-            new SlimSelect({
-                select: '#selectElement'
-            })
+            
 
             document.addEventListener("DOMContentLoaded", () => {
                         Livewire.hook('message.processed', (message, component) => {
