@@ -5,3 +5,8 @@ new SlimSelect({
     select: '#selectElement'
 })
 
+
+new SlimSelect({
+    select: '#select2'
+})
+

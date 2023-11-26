@@ -29,16 +29,6 @@
         </div>
     @endif
 
-
-    <div wire:ignore class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-        <select id="selectElement">
-            <option>Option 1</option>
-            <option>Option 2</option>
-            <option>Option 3</option>
-        </select>
-    </div>
-
-
     @if (session()->has('saldonegativo'))
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <strong class="font-bold">Error !!</strong>
@@ -63,33 +53,75 @@
         </div>
 
         <div
-            class=" pt-8 flex transform hover:text-blue-600 transition-transform hover:scale-95 pb-2 mt-2 text-2xl font-medium text-gray-900">
-            <h1 class="pr-2 ">
-                Gerar Fatura
-            </h1>
-            <button wire:click.prevent="gerarFaturas"
-                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
-                Gerar
-                <span class="material-symbols-outlined">sync</span>
-            </button>
+            class=" pt-8 flex justify-around transform hover:text-blue-600 transition-transform hover:scale-95 pb-2 mt-2 text-2xl font-medium text-gray-900">
 
-            <h1 class="pl-4 pr-2 ">
-                Faturas Pagas
-            </h1>
-            <button wire:click.prevent="faturaspagas"
-                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-500 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 white:bg-green-600 white:hover:bg-green-700 white:focus:ring-green-800">
-                Conferir
-                <span class="material-symbols-outlined">sync</span>
-            </button>
 
-            <h1 class="pl-4 pr-2 ">
-                Faturas Pendentes
-            </h1>
-            <button wire:click.prevent="faturaspendetes"
-                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 white:bg-orange-600 white:hover:bg-orange-700 white:focus:ring-orange-800">
-                Conferir
-                <span class="material-symbols-outlined">sync</span>
-            </button>
+            <div class="flex flex-col">
+                <h1 class="pr-2 ">
+                    Gerar Fatura
+                </h1>
+                <button wire:click.prevent="gerarFaturas"
+                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 white:bg-blue-600 white:hover:bg-blue-700 white:focus:ring-blue-800">
+                    Gerar
+                    <span class="material-symbols-outlined">sync</span>
+                </button>
+            </div>
+
+
+            <div class="flex flex-col">
+                <h1 class="pl-4 pr-2 mb-2 text-2xl font-bold">
+                    Faturas Pendentes
+                </h1>
+
+                <div class="flex flex-row items-center mb-4">
+                    <button wire:click.prevent="faturaspendetes"
+                        class="inline-flex items-center px-3 py-2 mr-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 white:bg-orange-600 white:hover:bg-orange-700 white:focus:ring-orange-800">
+                        Conferir
+                        <span class="material-symbols-outlined">sync</span>
+                    </button>
+
+                    <div wire:ignore class="text-green-700 px-4 py-3 rounded relative" role="alert">
+                        <select id="selectElement">
+                            <option>Pendetes</option>
+                            @foreach ($faturas as $fatura)
+                                @if ($fatura->status == 'pendente')
+                                    <option value="{{ $fatura->id }}">FCT-{{ $fatura->id }}_{{ $fatura->id }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <h1 class="pl-4 pr-2 mb-2 text-2xl font-bold">
+                    Faturas Pagas
+                </h1>
+
+                <div class="flex flex-row items-center mb-4">
+                    <button wire:click.prevent="faturaspagas"
+                        class="inline-flex items-center px-3 py-2 mr-2 text-sm font-medium text-center text-white bg-green-500 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 white:bg-green-600 white:hover:bg-green-700 white:focus:ring-green-800">
+                        Conferir
+                        <span class="material-symbols-outlined">sync</span>
+                    </button>
+
+                    <div wire:ignore class=" text-green-700 px-4 py-3 rounded relative" role="alert">
+                        <select id="select2">
+                            <option>Pagas</option>
+                            @foreach ($faturas as $fatura)
+                                @if ($fatura->status == 'pago')
+                                    <option value="{{ $fatura->id }}">FCT-{{ $fatura->id }}_{{ $fatura->id }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+
 
         </div>
     </div>
@@ -256,16 +288,17 @@
     </div>
 
     @script
-    <script>
-        new SlimSelect({
-            select: '#selectElement'
-        })
-
-        document.addEventListener("DOMContentLoaded", () => {
-                    Livewire.hook('message.processed', (message, component) => {
-                        new SlimSelect({
-                            select: '#selectElement'
+        <script>
+            new SlimSelect({
+                select: '#selectElement'
             })
-        })
-    </script>
+
+            document.addEventListener("DOMContentLoaded", () => {
+                        Livewire.hook('message.processed', (message, component) => {
+                            new SlimSelect({
+                                select: '#selectElement'
+                            })
+                        })
+                    }
+        </script>
     @endscript
